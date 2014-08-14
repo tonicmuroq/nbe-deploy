@@ -1,4 +1,4 @@
 NBE-deploy
 ==========
 
-A deploy tools set for NBE.
+A deploy tool kit for NBE.
