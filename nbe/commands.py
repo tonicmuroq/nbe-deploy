@@ -2,7 +2,7 @@
 
 import click
 
-from .actions import add_app, register_app, list_app
+from .actions import add_app, register_app, list_app, remove_app
 from .utils import nbeinfo
 
 
@@ -37,3 +37,12 @@ def register(name, version):
 @click.option('--version', '-v', default='latest')
 def list(name, version):
     list_app(name, version)
+
+
+@nbecommands.command()
+@click.argument('name')
+@click.argument('host')
+@click.option('--version', '-v', default='latest')
+def remove(name, version, host):
+    remove_app(name, version, host)
+    click.echo(nbeinfo('app %s:%s removed from %s' % (name, version, host)))

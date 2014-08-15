@@ -31,7 +31,7 @@ def add_app(name, version, host):
     data = {
         'host': host,
     }
-    r = requests.post('http://10.1.201.99:46666/app/%s/%s' % (name, version), data)
+    r = requests.post('http://10.1.201.99:46666/app/%s/%s/add' % (name, version), data)
     return r.status_code == 200
 
 
@@ -46,3 +46,11 @@ def list_app(name, version='latest'):
             click.echo(nbeerror(rs['msg']))
     else:
         click.echo(nbeerror('Error: %s' % r.status_code))
+
+
+def remove_app(name, version, host):
+    data = {
+        'hosts': host
+    }
+    r = requests.post('http://10.1.201.99:46666/app/%s/%s/remove' % (name, version), data)
+    return r.status_code == 200
