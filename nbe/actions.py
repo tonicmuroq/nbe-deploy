@@ -5,7 +5,7 @@ import json
 import requests
 import yaml
 
-from .utils import nbeerror
+from .utils import nbeerror, nbeinfo
 
 
 def yaml_to_json(filename):
@@ -33,3 +33,16 @@ def add_app(name, version, host):
     }
     r = requests.post('http://10.1.201.99:46666/app/%s/%s' % (name, version), data)
     return r.status_code == 200
+
+
+def list_app(name, version='latest'):
+    r = requests.get('http://10.1.201.99:46666/app/%s/%s' % (name, version))
+    if r.status_code == 200:
+        rs = json.loads(r.content)
+        if not rs['r']:
+            click.echo(nbeinfo(rs['name']))
+            click.echo(nbeinfo(rs['version']))
+        else:
+            click.echo(nbeerror(rs['msg']))
+    else:
+        click.echo(nbeerror('Error: %s' % r.status_code))

@@ -2,7 +2,7 @@
 
 import click
 
-from .actions import add_app, register_app
+from .actions import add_app, register_app, list_app
 from .utils import nbeinfo
 
 
@@ -30,3 +30,10 @@ def register(name, version):
     # 另外可能这里应该指定代码分支
     register_app(name, version)
     click.echo(nbeinfo('app %s:%s registered' % (name, version)))
+
+
+@nbecommands.command()
+@click.argument('name')
+@click.option('--version', '-v', default='latest')
+def list(name, version):
+    list_app(name, version)
