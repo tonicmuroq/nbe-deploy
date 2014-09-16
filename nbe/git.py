@@ -56,7 +56,7 @@ class GitRepository(object):
     @property
     def version(self):
         # 7 will be ok
-        return self.repo.head.target[:7]
+        return self.repo.head.target.hex[:7]
 
     def __getattr__(self, name):
         if name in self.remotes:
