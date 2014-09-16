@@ -75,13 +75,12 @@ def test(host, version):
 
 @nbecommands.command()
 @click.argument('host')
-@click.argument('group')
 @click.argument('base')
 @click.option('--version', '-v', default='latest')
-def build(host, group, base, version):
+def build(host, base, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
     version = r.version
 
-    build_image(name, version, host)
+    build_image(name, version, r.origin.group, base, host)
     click.echo(nbeinfo('build %s @ %s on %s' % (name, version, host)))
