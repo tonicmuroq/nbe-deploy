@@ -83,9 +83,11 @@ def test_app(name, version, host):
     return r.status_code == 200
 
 
-def build_image(name, version, host):
+def build_image(name, version, group, base, host):
     data = {
-        'host': host
+        'host': host,
+        'group': group,
+        'base': base,
     }
     url = urljoin(config.nbe_master_url,
         'app/{name}/{version}/build'.format(name=name, version=version))

@@ -75,8 +75,10 @@ def test(host, version):
 
 @nbecommands.command()
 @click.argument('host')
+@click.argument('group')
+@click.argument('base')
 @click.option('--version', '-v', default='latest')
-def build(host, version):
+def build(host, group, base, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
     version = r.version
