@@ -32,7 +32,7 @@ def register_app(name, version):
     url = urljoin(config.nbe_master_url,
             '/app/{name}/{version}'.format(name=name, version=version))
     r = requests.post(url, data=data)
-    click.echo(nbeinfo('register to %s' % url))
+    click.echo(nbeinfo('request sent to %s' % url))
     return r.status_code == 200
 
 
@@ -43,6 +43,7 @@ def add_app(name, version, host):
     url = urljoin(config.nbe_master_url,
         'app/{name}/{version}/add'.format(name=name, version=version))
     r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
     return r.status_code == 200
 
 
@@ -62,9 +63,32 @@ def list_app(name, version='latest'):
 
 def remove_app(name, version, host):
     data = {
-        'hosts': host
+        'host': host
     }
     url = urljoin(config.nbe_master_url,
         'app/{name}/{version}/remove'.format(name=name, version=version))
     r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
+    return r.status_code == 200
+
+
+def test_app(name, version, host):
+    data = {
+        'host': host
+    }
+    url = urljoin(config.nbe_master_url,
+        'app/{name}/{version}/test'.format(name=name, version=version))
+    r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
+    return r.status_code == 200
+
+
+def build_image(name, version, host):
+    data = {
+        'host': host
+    }
+    url = urljoin(config.nbe_master_url,
+        'app/{name}/{version}/build'.format(name=name, version=version))
+    r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
     return r.status_code == 200

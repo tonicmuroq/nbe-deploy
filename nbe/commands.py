@@ -3,7 +3,7 @@
 import os
 import click
 
-from .actions import add_app, register_app, list_app, remove_app
+from .actions import add_app, register_app, list_app, remove_app, test_app, build_image
 from .git import GitRepository
 from .utils import nbeinfo
 
@@ -59,3 +59,27 @@ def remove(host, version):
 
     remove_app(name, version, host)
     click.echo(nbeinfo('%s @ %s removed from %s' % (name, version, host)))
+
+
+@nbecommands.command()
+@click.argument('host')
+@click.option('--version', '-v', default='latest')
+def test(host, version):
+    r = GitRepository(os.path.abspath('.'))
+    name = r.origin.name
+    version = r.version
+
+    test_app(name, version, host)
+    click.echo(nbeinfo('test %s @ %s on %s' % (name, version, host)))
+
+
+@nbecommands.command()
+@click.argument('host')
+@click.option('--version', '-v', default='latest')
+def build(host, version):
+    r = GitRepository(os.path.abspath('.'))
+    name = r.origin.name
+    version = r.version
+
+    build_image(name, version, host)
+    click.echo(nbeinfo('build %s @ %s on %s' % (name, version, host)))
