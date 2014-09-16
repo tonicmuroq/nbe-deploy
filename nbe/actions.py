@@ -16,14 +16,20 @@ def yaml_to_json(filename):
             return json.dumps(yaml.load(f))
     except IOError:
         click.echo(nbeerror('file %s not exist.' % filename))
+        return ''
 
 
 def register_app(name, version):
+    app_yaml = yaml_to_json('app.yaml')
+    config_yaml = yaml_to_json('config.yaml')
+    if not app_yaml:
+        return
+
     data = {
         'name': name,
         'version': version,
-        'app_yaml': yaml_to_json('app.yaml'),
-        'config_yaml': yaml_to_json('config.yaml'),
+        'app_yaml': app_yaml,
+        'config_yaml': config_yaml,
     }
     r = requests.post(urljoin(config.nbe_master_url, '/app/new'), data=data)
     return r.status_code == 200
