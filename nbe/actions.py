@@ -26,12 +26,13 @@ def register_app(name, version):
         return
 
     data = {
-        'name': name,
-        'version': version,
-        'app_yaml': app_yaml,
-        'config_yaml': config_yaml,
+        'appyaml': app_yaml,
+        'configyaml': config_yaml,
     }
-    r = requests.post(urljoin(config.nbe_master_url, '/app/new'), data=data)
+    url = urljoin(config.nbe_master_url,
+            '/app/{name}/{version}'.format(name=name, version=version))
+    r = requests.post(url, data=data)
+    click.echo(nbeinfo('register to %s' % url))
     return r.status_code == 200
 
 
@@ -39,8 +40,9 @@ def add_app(name, version, host):
     data = {
         'host': host,
     }
-    r = requests.post(urljoin(config.nbe_master_url,
-        'app/{name}/{version}/add'.format(name=name, version=version)), data)
+    url = urljoin(config.nbe_master_url,
+        'app/{name}/{version}/add'.format(name=name, version=version))
+    r = requests.post(url, data)
     return r.status_code == 200
 
 
@@ -62,6 +64,7 @@ def remove_app(name, version, host):
     data = {
         'hosts': host
     }
-    r = requests.post(urljoin(config.nbe_master_url,
-        'app/{name}/{version}/remove'.format(name=name, version=version)), data)
+    url = urljoin(config.nbe_master_url,
+        'app/{name}/{version}/remove'.format(name=name, version=version))
+    r = requests.post(url, data)
     return r.status_code == 200
