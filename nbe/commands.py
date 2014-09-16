@@ -15,8 +15,7 @@ def nbecommands():
 
 @nbecommands.command()
 @click.argument('host')
-@click.option('--version', '-v', default='latest',
-        help='version of app, default to latest')
+@click.option('--version', '-v', default='latest')
 def add(host, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
@@ -24,8 +23,8 @@ def add(host, version):
     if version == 'latest':
         version = r.version
 
+    click.echo(nbeinfo('add %s @ %s to %s' % (name, version, host)))
     add_app(name, version, host)
-    click.echo(nbeinfo('app %s:%s added to %s' % (name, version, host)))
 
 
 @nbecommands.command()
@@ -36,7 +35,6 @@ def register():
 
     click.echo(nbeinfo('register %s @ %s' % (name, version)))
     register_app(name, version)
-    click.echo(nbeinfo('app %s:%s registered' % (name, version)))
 
 
 @nbecommands.command()
@@ -60,4 +58,4 @@ def remove(host, version):
     version = r.version
 
     remove_app(name, version, host)
-    click.echo(nbeinfo('app %s:%s removed from %s' % (name, version, host)))
+    click.echo(nbeinfo('%s @ %s removed from %s' % (name, version, host)))
