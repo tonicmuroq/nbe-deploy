@@ -4,8 +4,10 @@ import click
 import json
 import requests
 import yaml
+from urlparse import urljoin
 
 from .utils import nbeerror, nbeinfo
+from .config import config
 
 
 def yaml_to_json(filename):
@@ -23,7 +25,7 @@ def register_app(name, version):
         'app_yaml': yaml_to_json('app.yaml'),
         'config_yaml': yaml_to_json('config.yaml'),
     }
-    r = requests.post('http://10.1.201.99:46666/app/new', data=data)
+    r = requests.post(urljoin(config.nbe_master_url, '/app/new'), data=data)
     return r.status_code == 200
 
 
@@ -31,12 +33,14 @@ def add_app(name, version, host):
     data = {
         'host': host,
     }
-    r = requests.post('http://10.1.201.99:46666/app/%s/%s/add' % (name, version), data)
+    r = requests.post(urljoin(config.nbe_master_url,
+        'app/{name}/{version}/add'.format(name=name, version=version)), data)
     return r.status_code == 200
 
 
 def list_app(name, version='latest'):
-    r = requests.get('http://10.1.201.99:46666/app/%s/%s' % (name, version))
+    r = requests.get(urljoin(config.nbe_master_url,
+        'app/{name}/{version}'.format(name=name, version=version)))
     if r.status_code == 200:
         rs = json.loads(r.content)
         if not rs['r']:
@@ -52,5 +56,6 @@ def remove_app(name, version, host):
     data = {
         'hosts': host
     }
-    r = requests.post('http://10.1.201.99:46666/app/%s/%s/remove' % (name, version), data)
+    r = requests.post(urljoin(config.nbe_master_url,
+        'app/{name}/{version}/remove'.format(name=name, version=version)), data)
     return r.status_code == 200
