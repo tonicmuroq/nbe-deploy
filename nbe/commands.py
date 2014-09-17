@@ -55,7 +55,9 @@ def list(version):
 def remove(host, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
-    version = r.version
+    if version == 'latest':
+        version = r.version
+
 
     remove_app(name, version, host)
     click.echo(nbeinfo('%s @ %s removed from %s' % (name, version, host)))
@@ -67,7 +69,9 @@ def remove(host, version):
 def test(host, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
-    version = r.version
+    if version == 'latest':
+        version = r.version
+
 
     test_app(name, version, host)
     click.echo(nbeinfo('test %s @ %s on %s' % (name, version, host)))
@@ -80,7 +84,9 @@ def test(host, version):
 def build(host, base, version):
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
-    version = r.version
+    if version == 'latest':
+        version = r.version
+
 
     build_image(name, version, r.origin.group, base, host)
     click.echo(nbeinfo('build %s @ %s on %s' % (name, version, host)))
