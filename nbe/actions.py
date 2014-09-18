@@ -36,9 +36,10 @@ def register_app(name, version):
     return r.status_code == 200
 
 
-def add_app(name, version, host):
+def add_app(name, version, host, daemon):
     data = {
         'host': host,
+        'daemon': daemon,
     }
     url = urljoin(config.nbe_master_url,
         'app/{name}/{version}/add'.format(name=name, version=version))
