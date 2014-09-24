@@ -3,7 +3,7 @@
 import os
 import click
 
-from .actions import add_app, register_app, list_app, remove_app, test_app, build_image
+from .actions import add_app, register_app, list_app, remove_app, test_app, build_image, deploy_app
 from .git import GitRepository
 from .utils import nbeinfo
 
