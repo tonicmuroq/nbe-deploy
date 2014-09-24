@@ -95,3 +95,15 @@ def build_image(name, version, group, base, host):
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     return r.status_code == 200
+
+
+def deploy_app(name, version, host, daemon):
+    data = {
+        'hosts': host,
+        'daemon': daemon,
+    }
+    url = urljoin(config.nbe_master_url,
+        'app/{name}/{version}/deploy'.format(name=name, version=version))
+    r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
+    return r.status_code == 200

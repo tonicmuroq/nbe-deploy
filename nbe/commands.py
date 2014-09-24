@@ -29,6 +29,21 @@ def add(host, version, daemon):
 
 
 @nbecommands.command()
+@click.argument('host')
+@click.option('--version', '-v', default='latest')
+@click.option('--daemon', '-d', default='false')
+def deploy(host, version, daemon):
+    r = GitRepository(os.path.abspath('.'))
+    name = r.origin.name
+
+    if version == 'latest':
+        version = r.version
+
+    click.echo(nbeinfo('add %s @ %s to %s' % (name, version, host)))
+    deploy_app(name, version, host, daemon)
+
+
+@nbecommands.command()
 def register():
     r = GitRepository(os.path.abspath('.'))
     name = r.origin.name
