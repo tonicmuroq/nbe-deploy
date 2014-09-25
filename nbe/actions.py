@@ -33,6 +33,7 @@ def register_app(name, version):
             '/app/{name}/{version}'.format(name=name, version=version))
     r = requests.post(url, data=data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
 
 
@@ -45,6 +46,7 @@ def add_app(name, version, host, daemon):
         'app/{name}/{version}/add'.format(name=name, version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
 
 
@@ -70,6 +72,7 @@ def remove_app(name, version, host):
         'app/{name}/{version}/remove'.format(name=name, version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
 
 
@@ -81,6 +84,7 @@ def test_app(name, version, host):
         'app/{name}/{version}/test'.format(name=name, version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
 
 
@@ -94,6 +98,7 @@ def build_image(name, version, group, base, host):
         'app/{name}/{version}/build'.format(name=name, version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
 
 
@@ -106,4 +111,5 @@ def deploy_app(name, version, host, daemon):
         'app/{name}/{version}/deploy'.format(name=name, version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
