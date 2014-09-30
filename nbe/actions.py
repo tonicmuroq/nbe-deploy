@@ -113,3 +113,16 @@ def deploy_app(name, version, host, daemon):
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
     return r.status_code == 200
+
+
+def update_app(name, old_version, new_version, host):
+    data = {
+        'hosts': host,
+        'to': new_version,
+    }
+    url = urljoin(config.nbe_master_url,
+            'app/{name}/{old_version}/update'.format(name=name, old_version=old_version))
+    r = requests.post(url, data)
+    click.echo(nbeinfo('request sent to %s' % url))
+    click.echo(nbeinfo(str(r.json())))
+    return r.status_code == 200
