@@ -38,12 +38,15 @@ def register_app(name, version):
 
 
 def add_app(name, version, host, daemon):
+    app_yaml = yaml_to_json('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'host': host,
         'daemon': daemon,
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/add'.format(name=name, version=version))
+        'app/{name}/{version}/add'.format(name=json.loads(app_yaml)['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -89,13 +92,16 @@ def test_app(name, version, host):
 
 
 def build_image(name, version, group, base, host):
+    app_yaml = yaml_to_json('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'host': host,
         'group': group,
         'base': base,
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/build'.format(name=name, version=version))
+        'app/{name}/{version}/build'.format(name=json.loads(app_yaml)['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
