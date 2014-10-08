@@ -19,6 +19,15 @@ def yaml_to_json(filename):
         return ''
 
 
+def yaml_load(filename):
+    try:
+        with open(filename, 'r') as f:
+            return yaml.load(f)
+    except IOError:
+        click.echo(nbeerror('file %s not exist.' % filename))
+        return {}
+
+
 def register_app(name, version):
     app_yaml = yaml_to_json('app.yaml')
     config_yaml = yaml_to_json('config.yaml')
@@ -38,7 +47,7 @@ def register_app(name, version):
 
 
 def add_app(name, version, host, daemon):
-    app_yaml = yaml_to_json('app.yaml')
+    app_yaml = yaml_load('app.yaml')
     if not app_yaml:
         return
     data = {
@@ -46,7 +55,7 @@ def add_app(name, version, host, daemon):
         'daemon': daemon,
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/add'.format(name=json.loads(app_yaml)['appname'], version=version))
+        'app/{name}/{version}/add'.format(name=app_yaml['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -68,11 +77,14 @@ def list_app(name, version='latest'):
 
 
 def remove_app(name, version, host):
+    app_yaml = yaml_load('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'host': host
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/remove'.format(name=name, version=version))
+        'app/{name}/{version}/remove'.format(name=app_yaml['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -80,11 +92,14 @@ def remove_app(name, version, host):
 
 
 def test_app(name, version, host):
+    app_yaml = yaml_load('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'host': host
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/test'.format(name=name, version=version))
+        'app/{name}/{version}/test'.format(name=app_yaml['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -92,7 +107,7 @@ def test_app(name, version, host):
 
 
 def build_image(name, version, group, base, host):
-    app_yaml = yaml_to_json('app.yaml')
+    app_yaml = yaml_load('app.yaml')
     if not app_yaml:
         return
     data = {
@@ -101,7 +116,7 @@ def build_image(name, version, group, base, host):
         'base': base,
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/build'.format(name=json.loads(app_yaml)['appname'], version=version))
+        'app/{name}/{version}/build'.format(name=app_yaml['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -109,12 +124,15 @@ def build_image(name, version, group, base, host):
 
 
 def deploy_app(name, version, host, daemon):
+    app_yaml = yaml_load('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'hosts': host,
         'daemon': daemon,
     }
     url = urljoin(config.nbe_master_url,
-        'app/{name}/{version}/deploy'.format(name=name, version=version))
+        'app/{name}/{version}/deploy'.format(name=app_yaml['appname'], version=version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
@@ -122,12 +140,15 @@ def deploy_app(name, version, host, daemon):
 
 
 def update_app(name, old_version, new_version, host):
+    app_yaml = yaml_load('app.yaml')
+    if not app_yaml:
+        return
     data = {
         'hosts': host,
         'to': new_version,
     }
     url = urljoin(config.nbe_master_url,
-            'app/{name}/{old_version}/update'.format(name=name, old_version=old_version))
+            'app/{name}/{old_version}/update'.format(name=app_yaml['appname'], old_version=old_version))
     r = requests.post(url, data)
     click.echo(nbeinfo('request sent to %s' % url))
     click.echo(nbeinfo(str(r.json())))
