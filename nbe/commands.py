@@ -1,18 +1,41 @@
 # coding: utf-8
 
 import os
+import yaml
 import click
 
 from .actions import (add_app, register_app, list_app, remove_app,
         test_app, build_image, deploy_app, update_app)
 from .git import GitRepository
 from .utils import nbeinfo
-
+from collections import OrderedDict
 
 @click.group()
 def nbecommands():
     pass
 
+@nbecommands.command()
+@click.argument('appname')
+@click.argument('runtime')
+def create(appname, runtime):
+    appyaml = OrderedDict({
+        'appname': appname, \
+        'runtime': runtime, \
+        'cmd': [
+            'python -c "print \'Hello World\'"',
+        ], \
+        'services': [
+            'python -c "print \'Hello World\'"',
+        ], \
+        'build': [
+            'python -c "print \'Hello World\'"',
+        ], \
+        'test': [
+            'python -c "print \'Hello World\'"',
+        ], \
+        'static': '', \
+    })
+    yaml.safe_dump(appyaml, open('app.yaml', 'w'), default_flow_style=False)
 
 @nbecommands.command()
 @click.argument('host')
