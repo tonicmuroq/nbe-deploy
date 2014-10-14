@@ -8,7 +8,6 @@ from .actions import (add_app, register_app, list_app, remove_app,
         test_app, build_image, deploy_app, update_app)
 from .git import GitRepository
 from .utils import nbeinfo
-from collections import OrderedDict
 
 @click.group()
 def nbecommands():
@@ -18,7 +17,7 @@ def nbecommands():
 @click.argument('appname')
 @click.argument('runtime')
 def create(appname, runtime):
-    appyaml = OrderedDict({
+    appyaml = {
         'appname': appname, \
         'runtime': runtime, \
         'cmd': [
@@ -34,7 +33,7 @@ def create(appname, runtime):
             'python -c "print \'Hello World\'"',
         ], \
         'static': '', \
-    })
+    }
     yaml.safe_dump(appyaml, open('app.yaml', 'w'), default_flow_style=False)
 
 @nbecommands.command()
