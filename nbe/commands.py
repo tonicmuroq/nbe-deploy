@@ -73,7 +73,7 @@ def register():
     version = r.version
 
     click.echo(nbeinfo('register %s @ %s' % (name, version)))
-    register_app(name, version)
+    register_app(name, version, r.origin.group)
 
 
 @nbecommands.command()

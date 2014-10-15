@@ -28,7 +28,7 @@ def yaml_load(filename):
         return {}
 
 
-def register_app(name, version):
+def register_app(name, version, group):
     app_yaml = yaml_to_json('app.yaml')
     config_yaml = yaml_to_json('config.yaml')
     if not app_yaml:
@@ -37,6 +37,7 @@ def register_app(name, version):
     data = {
         'appyaml': app_yaml,
         'configyaml': config_yaml,
+        'group': group,
     }
     url = urljoin(config.nbe_master_url,
             '/app/{name}/{version}'.format(name=name, version=version))
